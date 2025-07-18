@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConvertMaster - All-in-One Conversion Tool</title>
+    <meta name="description" content="Free online tool for unit conversion and image compression. Convert length, weight, temperature and compress images easily.">
+    <meta property="og:title" content="ConvertMaster - All-in-One Conversion Tool">
+    <meta property="og:description" content="Free online tool for unit conversion and image compression">
+    <meta property="og:image" content="https://example.com/convertmaster-og.jpg">
+    <meta property="og:url" content="https://example.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📐</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4a6cfa;
+            --primary-dark: #3a5ce5;
+            --secondary: #ff6b6b;
+            --dark: #2d3748;
+            --light: #f8f9fa;
+            --gray: #718096;
+            --success: #10b981;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .nav-btn.secondary:hover {
+            background: #f0f4ff;
+        }
+        
+        /* Main Content */
+        .hero {
+            text-align: center;
+            padding: 40px 0 30px;
+        }
+        
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+        }
+        
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: #f0f4ff;
+        }
+        
+        /* Conversion Box */
+        .converter-box {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+            transition: all 0.5s ease;
+        }
+        
+        .converter-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .converter-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+            color: var(--dark);
+        }
+        
+        .converter-title i {
+            color: var(--primary);
+        }
+        
+        .unit-selectors {
+            display: flex;
+            gap: 15px;
+            margin-left: auto;
+            flex-wrap: wrap;
+        }
+        
+        select {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            font-size: 1rem;
+            color: var(--dark);
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        select:focus {
+            border-color: var(--primary);
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 25px;
+        }
+        
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input {
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 108, 250, 0.2);
+        }
+        
+        .result-box {
+            background: #f0f4ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: var(--gray);
+        }
+        
+        .result-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        /* Image Compressor */
+        .image-compressor {
+            display: none;
+        }
+        
+        .upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: #f8faff;
+        }
+        
+        .upload-area i {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .quality-slider {
+            margin: 25px 0;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .slider-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        input[type="range"] {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: #e2e8f0;
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+        
+        .compress-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto;
+            transition: var(--transition);
+        }
+        
+        .compress-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Preview Section */
+        .preview-section {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .preview-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .preview-box {
+            flex: 1;
+            min-width: 300px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .preview-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            max-height: 200px;
+            object-fit: contain;
+        }
+        
+        .file-info {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .download-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 20px auto 0;
+            transition: var(--transition);
+        }
+        
+        .download-btn:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 18px;
+            transition: var(--transition);
+        }
+        
+        .social-icon:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a0aec0;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .converter-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .unit-selectors {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .preview-container {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-buttons {
+                flex-direction: column;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .converter-box {
+                padding: 20px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+                <h1>ConvertMaster</h1>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn">
+                    <i class="fas fa-home"></i> Home
+                </button>
+                <button class="nav-btn secondary">
+                    <i class="fas fa-download"></i> Download Android App
+                </button>
+                <button class="nav-btn secondary">
+                    <i class="fas fa-tools"></i> More Free Tools
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <section class="hero">
+            <h2>All-in-One Conversion Toolkit</h2>
+            <p>Convert between different units of measurement and compress your images - all in one place, for free!</p>
+            
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="unit-converter">
+                    <i class="fas fa-exchange-alt"></i> Unit Converter
+                </button>
+                <button class="tab-btn" data-tab="image-compressor">
+                    <i class="fas fa-file-image"></i> Image Compressor
+                </button>
+            </div>
+        </section>
+
+        <!-- Unit Converter -->
+        <section class="converter-box unit-converter">
+            <div class="converter-header">
+                <div class="converter-title">
+                    <i class="fas fa-ruler-combined"></i>
+                    <h3>Unit Conversion</h3>
+                </div>
+                <div class="unit-selectors">
+                    <select id="category-select">
+                        <option value="length">Length</option>
+                        <option value="weight">Weight</option>
+                        <option value="temperature">Temperature</option>
+                    </select>
+                    <select id="from-unit">
+                        <!-- Populated by JavaScript -->
+                    </select>
+                    <select id="to-unit">
+                        <!-- Populated by JavaScript -->
+                    </select>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="input-value">Enter Value:</label>
+                <input type="number" id="input-value" placeholder="Enter value to convert..." autocomplete="off">
+            </div>
+            
+            <div class="result-box">
+                <div class="result-label">Converted Value:</div>
+                <div class="result-value" id="result">0.00</div>
+            </div>
+        </section>
+
+        <!-- Image Compressor -->
+        <section class="converter-box image-compressor">
+            <div class="converter-header">
+                <div class="converter-title">
+                    <i class="fas fa-image"></i>
+                    <h3>Image Compressor</h3>
+                </div>
+            </div>
+            
+            <div class="upload-area" id="upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Click to Upload Image</h3>
+                <p>or drag and drop your file here</p>
+                <input type="file" id="file-input" accept="image/*" style="display: none;">
+            </div>
+            
+            <div class="quality-slider">
+                <label>Compression Quality</label>
+                <div class="slider-container">
+                    <span class="slider-value" id="quality-value">80%</span>
+                    <input type="range" id="quality-slider" min="10" max="100" value="80">
+                </div>
+            </div>
+            
+            <button class="compress-btn" id="compress-btn">
+                <i class="fas fa-compress-alt"></i> Compress Image
+            </button>
+            
+            <div class="preview-section" id="preview-section">
+                <div class="preview-container">
+                    <div class="preview-box">
+                        <div class="preview-title">Original Image</div>
+                        <img id="original-preview" class="preview-image" src="" alt="Original">
+                        <div class="file-info">
+                            Size: <span id="original-size">0 KB</span>
+                        </div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="preview-title">Compressed Image</div>
+                        <img id="compressed-preview" class="preview-image" src="" alt="Compressed">
+                        <div class="file-info">
+                            Size: <span id="compressed-size">0 KB</span>
+                        </div>
+                        <button class="download-btn" id="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">About ConvertMaster</h4>
+                    <p>ConvertMaster is a free online tool that helps you convert between different units of measurement and compress your images without losing quality.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px;">
+                            <a href="#" style="color: #cbd5e0; text-decoration: none;">Home</a>
+                        </li>
+                        <li style="margin-bottom: 10px;">
+                            <a href="#" style="color: #cbd5e0; text-decoration: none;">Unit Converter</a>
+                        </li>
+                        <li style="margin-bottom: 10px;">
+                            <a href="#" style="color: #cbd5e0; text-decoration: none;">Image Compressor</a>
+                        </li>
+                        <li style="margin-bottom: 10px;">
+                            <a href="#" style="color: #cbd5e0; text-decoration: none;">Android App</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title">Contact Us</h4>
+                    <p>Have questions or suggestions? We'd love to hear from you!</p>
+                    <p style="margin-top: 15px;">
+                        <i class="fas fa-envelope" style="margin-right: 10px;"></i>
+                        contact@convertmaster.com
+                    </p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 ConvertMaster. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Unit Conversion Data
+        const conversionData = {
+            length: {
+                units: ["Meters", "Kilometers", "Centimeters", "Millimeters", "Inches", "Feet", "Yards", "Miles"],
+                factors: {
+                    "Meters": 1,
+                    "Kilometers": 1000,
+                    "Centimeters": 0.01,
+                    "Millimeters": 0.001,
+                    "Inches": 0.0254,
+                    "Feet": 0.3048,
+                    "Yards": 0.9144,
+                    "Miles": 1609.34
+                }
+            },
+            weight: {
+                units: ["Grams", "Kilograms", "Milligrams", "Pounds", "Ounces", "Tons"],
+                factors: {
+                    "Grams": 1,
+                    "Kilograms": 1000,
+                    "Milligrams": 0.001,
+                    "Pounds": 453.592,
+                    "Ounces": 28.3495,
+                    "Tons": 907185
+                }
+            },
+            temperature: {
+                units: ["Celsius", "Fahrenheit", "Kelvin"],
+                convert: function(value, from, to) {
+                    // Convert to Celsius first
+                    let celsius;
+                    if (from === "Celsius") celsius = value;
+                    else if (from === "Fahrenheit") celsius = (value - 32) * 5/9;
+                    else if (from === "Kelvin") celsius = value - 273.15;
+                    
+                    // Convert to target unit
+                    if (to === "Celsius") return celsius;
+                    else if (to === "Fahrenheit") return (celsius * 9/5) + 32;
+                    else if (to === "Kelvin") return celsius + 273.15;
+                }
+            }
+        };
+
+        // DOM Elements
+        const categorySelect = document.getElementById('category-select');
+        const fromUnitSelect = document.getElementById('from-unit');
+        const toUnitSelect = document.getElementById('to-unit');
+        const inputValue = document.getElementById('input-value');
+        const resultElement = document.getElementById('result');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const unitConverter = document.querySelector('.unit-converter');
+        const imageCompressor = document.querySelector('.image-compressor');
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const qualitySlider = document.getElementById('quality-slider');
+        const qualityValue = document.getElementById('quality-value');
+        const compressBtn = document.getElementById('compress-btn');
+        const previewSection = document.getElementById('preview-section');
+        const originalPreview = document.getElementById('original-preview');
+        const compressedPreview = document.getElementById('compressed-preview');
+        const originalSize = document.getElementById('original-size');
+        const compressedSize = document.getElementById('compressed-size');
+        const downloadBtn = document.getElementById('download-btn');
+
+        // Variables for image compression
+        let originalImage = null;
+        let compressedImageData = null;
+
+        // Initialize unit dropdowns
+        function initUnitDropdowns() {
+            const category = categorySelect.value;
+            const units = conversionData[category].units;
+            
+            // Clear existing options
+            fromUnitSelect.innerHTML = '';
+            toUnitSelect.innerHTML = '';
+            
+            // Add new options
+            units.forEach(unit => {
+                const fromOption = document.createElement('option');
+                fromOption.value = unit;
+                fromOption.textContent = unit;
+                fromUnitSelect.appendChild(fromOption);
+                
+                const toOption = document.createElement('option');
+                toOption.value = unit;
+                toOption.textContent = unit;
+                toUnitSelect.appendChild(toOption);
+            });
+            
+            // Set default to-unit different from from-unit
+            if (units.length > 1) {
+                toUnitSelect.selectedIndex = 1;
+            }
+            
+            // Convert on initialization
+            convertUnits();
+        }
+
+        // Unit conversion function
+        function convertUnits() {
+            const value = parseFloat(inputValue.value) || 0;
+            const category = categorySelect.value;
+            const fromUnit = fromUnitSelect.value;
+            const toUnit = toUnitSelect.value;
+            
+            let result;
+            
+            if (category === 'temperature') {
+                result = conversionData.temperature.convert(value, fromUnit, toUnit);
+            } else {
+                const factorFrom = conversionData[category].factors[fromUnit];
+                const factorTo = conversionData[category].factors[toUnit];
+                result = value * factorFrom / factorTo;
+            }
+            
+            // Format the result
+            resultElement.textContent = result.toFixed(2);
+        }
+
+        // Tab switching
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show the corresponding section
+                const tab = button.getAttribute('data-tab');
+                
+                if (tab === 'unit-converter') {
+                    unitConverter.style.display = 'block';
+                    imageCompressor.style.display = 'none';
+                } else if (tab === 'image-compressor') {
+                    unitConverter.style.display = 'none';
+                    imageCompressor.style.display = 'block';
+                }
+            });
+        });
+
+        // Image upload handling
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                
+                // Check if file is an image
+                if (!file.type.match('image.*')) {
+                    alert('Please select a valid image file.');
+                    return;
+                }
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    originalImage = new Image();
+                    originalImage.src = event.target.result;
+                    originalImage.onload = () => {
+                        originalPreview.src = originalImage.src;
+                        originalSize.textContent = formatFileSize(file.size);
+                        previewSection.style.display = 'block';
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Quality slider update
+        qualitySlider.addEventListener('input', () => {
+            qualityValue.textContent = qualitySlider.value + '%';
+        });
+
+        // Image compression
+        compressBtn.addEventListener('click', () => {
+            if (!originalImage) {
+                alert('Please upload an image first.');
+                return;
+            }
+            
+            const quality = parseInt(qualitySlider.value) / 100;
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions to match the image
+            canvas.width = originalImage.width;
+            canvas.height = originalImage.height;
+            
+            // Draw the image on canvas
+            ctx.drawImage(originalImage, 0, 0);
+            
+            // Compress the image
+            const compressedDataURL = canvas.toDataURL('image/jpeg', quality);
+            compressedPreview.src = compressedDataURL;
+            
+            // Calculate compressed size
+            const compressedSizeBytes = Math.round((compressedDataURL.length * 3) / 4);
+            compressedSize.textContent = formatFileSize(compressedSizeBytes);
+            
+            // Store compressed data for download
+            compressedImageData = compressedDataURL;
+        });
+
+        // Download compressed image
+        downloadBtn.addEventListener('click', () => {
+            if (!compressedImageData) {
+                alert('Please compress an image first.');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.href = compressedImageData;
+            link.download = 'compressed-image.jpg';
+            link.click();
+        });
+
+        // Helper function to format file size
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' bytes';
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            else return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set up unit conversion
+            initUnitDropdowns();
+            
+            // Add event listeners for conversion
+            categorySelect.addEventListener('change', initUnitDropdowns);
+            fromUnitSelect.addEventListener('change', convertUnits);
+            toUnitSelect.addEventListener('change', convertUnits);
+            inputValue.addEventListener('input', convertUnits);
+        });
+    </script>
+</body>
+</html>
